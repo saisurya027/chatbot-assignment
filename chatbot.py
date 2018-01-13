@@ -3,6 +3,18 @@ import os
 import aiml
 import requests
 import webbrowser
+import datetime
+import pytz
+import time
+import geopy
+from timezonefinder import TimezoneFinder
+
+
+def find_city(query):
+    for country, cities in pytz.country_timezones.items():
+        for city in cities:
+            if query in city:
+                return pytz.timezone(city)
 
 
 def find_in_list(str_list, text):
@@ -14,6 +26,7 @@ def find_in_list(str_list, text):
     return fg
 
 
+api_key = 'AIzaSyBFy-RvfpeDtXo-wVqNZSEbDrLHXo4dAFM'
 api_address = 'http://api.openweathermap.org/data/2.5/weather?appid=281953b3dd825c1de437f6bbb6ecd2eb&q='
 google_addres = 'http://google.com/#q='
 BRAIN_FILE = "brain.dump"
@@ -43,9 +56,30 @@ while True:
         new_url = api_address + city
         json_data = requests.get(new_url).json()
         # Parsing the Json Object:
-        print('Selected city : '+ city + '\nlat : '+ str(json_data['coord']['lat']) + '\t,lon : '+ str(json_data['coord']['lon']) )
+        print('Selected city : '+ city + '\nlat : '+ str(json_data['coord']['lat']) + '\t,lon : '+ str(json_data['coord']['lon']))
         print('Weather : '+json_data['weather'][0]['main'])
-        print('Temperature :'+str(json_data['main']['temp']))
+        print('Temperature : {:3}'.format(str(json_data['main']['temp']-273.15)) )
+    # time and location:
+    elif find_in_list(input_list, 'time') or find_in_list(input_list, 'location'):
+        city = input('Enter the city >>')
+        new_url = api_address + city
+        json_data = requests.get(new_url).json()
+        # Parsing the Json Object:
+        print('Selected city : ' + city)
+        lat = json_data['coord']['lat']
+        lng = json_data['coord']['lon']
+        print('lat:' + str(lat)+'\tlon:' + str(lng))
+        latitude = lat
+        longitude = lng
+        timestamp = time.time()
+
+        api_response = requests.get('https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&key={3}'.format(latitude,longitude,timestamp,api_key))
+        api_response_dict = api_response.json()
+
+        if api_response_dict['status'] == 'OK':
+            timezone_id = api_response_dict['timeZoneId']
+        print('Time zone of the city '+city+' is: '+str(timezone_id))
+        print(datetime.datetime.now(tz=pytz.timezone(timezone_id)))
 
     # Search google with your own query:
     elif find_in_list(input_list, 'google'):
