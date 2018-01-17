@@ -6,7 +6,6 @@ import webbrowser
 import datetime
 import pytz
 import time
-from eventregistry import *
 
 
 def find_city(query):
@@ -90,6 +89,7 @@ while True:
             condition = int(input('Select (1) for top headlines or (2) for specific topic >> '))
         except NameError:
             print('Please Enter an integer')
+        print('Fetching News....')
         if condition == 1:
             url = ('https://newsapi.org/v2/top-headlines?'
                    'sources=google-news-in&'
@@ -121,7 +121,6 @@ while True:
                 print('url : ' + json_news_data['articles'][i]['url'])
                 print()
                 print()
-
 
     # Search google with your own query:
     elif find_in_list(input_list, 'google'):
