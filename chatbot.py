@@ -6,6 +6,7 @@ import webbrowser
 import datetime
 import pytz
 import time
+import random
 
 
 def find_city(query):
@@ -121,6 +122,11 @@ while True:
                 print('url : ' + json_news_data['articles'][i]['url'])
                 print()
                 print()
+    elif find_in_list(input_list, "eateries") or find_in_list(input_list,"bits hyderabad"):
+        eatchoices=["You can try BITSnBYTES","Yumpy's is a cost effective choice", "C3 is costly but tasty food",
+                    "College Cafetaria is best if you are in hurry",
+                    "Elephant Restaurant is good"]
+        print(random.choice(eatchoices))
 
     # Search google with your own query:
     elif find_in_list(input_list, 'google'):

@@ -5366,6 +5366,9 @@ I like to talk to people.
 <category><pattern>WHAT IS CORPOREAL *</pattern>
 <template><set name="it">Corporeal</set> means physical reality.</template>
 </category>
+<category><pattern>WHAT IS YOUR NAME</pattern>
+<template>My name is  <bot name = "name"/> ?</template>
+</category>
 <category><pattern>WHAT IS YOUR *</pattern>
 <template>Are you asking about my <person/> ?</template>
 </category>
